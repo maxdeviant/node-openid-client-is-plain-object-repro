@@ -24,7 +24,7 @@ describe('Repro', () => {
     });
 
     describe('when using a workaround', () => {
-      it('throws an error', async () => {
+      it('returns the constructed client', async () => {
         nock('https://op.example.com', { allowUnmocked: true })
           .get('/.well-known/example-configuration')
           .reply(200, discoveryEndpointSuccess);

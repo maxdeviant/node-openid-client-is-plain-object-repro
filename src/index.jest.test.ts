@@ -1,7 +1,7 @@
-import { buildClient, buildClientWithWorkaround } from '.';
 import nock from 'nock';
+import { buildClient, buildClientWithWorkaround } from '.';
 
-describe('Repro', () => {
+describe('Repro: Jest', () => {
   const discoveryEndpointSuccess = {
     authorization_endpoint: 'https://op.example.com/o/oauth2/v2/auth',
     issuer: 'https://op.example.com',
@@ -12,14 +12,16 @@ describe('Repro', () => {
 
   describe('buildClient', () => {
     describe('when not using a workaround', () => {
-      it('throws an error', async () => {
+      // This test fails with the following error:
+      //    TypeError: jwks must be a JSON Web Key Set formatted object
+      it('returns the constructed client', async () => {
         nock('https://op.example.com', { allowUnmocked: true })
           .get('/.well-known/example-configuration')
           .reply(200, discoveryEndpointSuccess);
 
-        await expect(buildClient()).rejects.toThrow(
-          new TypeError('jwks must be a JSON Web Key Set formatted object')
-        );
+        const client = await buildClient();
+
+        expect(client).toBeDefined();
       });
     });
 
@@ -29,7 +31,7 @@ describe('Repro', () => {
           .get('/.well-known/example-configuration')
           .reply(200, discoveryEndpointSuccess);
 
-        const client = buildClientWithWorkaround();
+        const client = await buildClientWithWorkaround();
 
         expect(client).toBeDefined();
       });

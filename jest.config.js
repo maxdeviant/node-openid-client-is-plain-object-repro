@@ -5,6 +5,6 @@ module.exports = {
   restoreMocks: true,
   roots: ['<rootDir>/src'],
   testEnvironment: 'node',
-  testRegex: '.test.ts$',
+  testRegex: '.jest.test.ts$',
   transform: { '^.+\\.ts$': ['ts-jest', { isolatedModules: true }] },
 };
